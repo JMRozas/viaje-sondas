@@ -1,0 +1,142 @@
+{
+ "sondas": [
+  {
+   "nombre": "Voyager 1",
+   "clave": "voyager1",
+   "color": "#4fc3f7",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (1979)"
+    },
+    {
+     "sistema": "Saturno",
+     "texto": "Saturno (1980)"
+    },
+    {
+     "sistema": "Retrato",
+     "texto": "Retrato de familia del Sistema Solar (1990)"
+    }
+   ]
+  },
+  {
+   "nombre": "Voyager 2",
+   "clave": "voyager2",
+   "color": "#ffb74d",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (1979)"
+    },
+    {
+     "sistema": "Saturno",
+     "texto": "Saturno (1981)"
+    },
+    {
+     "sistema": "Urano",
+     "texto": "Urano (1986)"
+    },
+    {
+     "sistema": "Neptuno",
+     "texto": "Neptuno (1989)"
+    }
+   ]
+  },
+  {
+   "nombre": "Pioneer 10",
+   "clave": "pioneer10",
+   "color": "#aed581",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (1973)"
+    }
+   ]
+  },
+  {
+   "nombre": "Pioneer 11",
+   "clave": "pioneer11",
+   "color": "#f06292",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (1974)"
+    },
+    {
+     "sistema": "Saturno",
+     "texto": "Saturno (1979)"
+    }
+   ]
+  },
+  {
+   "nombre": "Galileo",
+   "clave": "galileo",
+   "color": "#90caf9",
+   "pasos": [
+    {
+     "sistema": "Venus",
+     "texto": "Venus (1990)"
+    },
+    {
+     "sistema": "Tierra",
+     "texto": "Tierra (1990, 1992)"
+    },
+    {
+     "sistema": "Gaspra",
+     "texto": "Gaspra (1991)"
+    },
+    {
+     "sistema": "Ida",
+     "texto": "Ida (1993)"
+    },
+    {
+     "sistema": "Shoemaker-Levy 9",
+     "texto": "Impactos del cometa Shoemaker-Levy 9 en Júpiter (1994)"
+    },
+    {
+     "sistema": "Júpiter",
+     "texto": "En órbita de Júpiter, toda la misión (1995-2003)"
+    }
+   ]
+  },
+  {
+   "nombre": "Cassini",
+   "clave": "cassini",
+   "color": "#c5e1a5",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (2000)"
+    },
+    {
+     "sistema": "Febe",
+     "texto": "Febe (2004)"
+    },
+    {
+     "sistema": "Saturno",
+     "texto": "En órbita de Saturno, toda la misión (2004-2017)"
+    }
+   ]
+  },
+  {
+   "nombre": "New Horizons",
+   "clave": "newhorizons",
+   "color": "#80deea",
+   "pasos": [
+    {
+     "sistema": "Júpiter",
+     "texto": "Júpiter (2007)"
+    },
+    {
+     "sistema": "Plutón",
+     "texto": "Plutón (2015)"
+    },
+    {
+     "sistema": "Arrokoth",
+     "texto": "Arrokoth (2019)"
+    }
+   ]
+  }
+ ],
+ "generado": "2026-11-22 14:56"
+}

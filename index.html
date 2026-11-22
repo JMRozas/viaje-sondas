@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viaje de las sondas por el Sistema Solar</title>
+<meta name="description" content="Animación a escala real del viaje de las Voyager, Pioneer, Galileo, Cassini y New Horizons, con sus sobrevuelos, sus fotos y lo que midieron.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<header>
+  <h1>Viaje de las sondas por el Sistema Solar</h1>
+  <button id="volver" class="boton" hidden>Cambiar de sonda u opciones</button>
+</header>
+
+<main>
+  <!-- Paso 1: elegir sonda y opciones -->
+  <section id="inicio">
+    <p class="intro">Las trayectorias reales de siete sondas, a escala, con lo que midieron del viento solar y
+      del campo magnético, y una vista ampliada de cada sobrevuelo con las fotos que tomaron.</p>
+    <form id="formulario">
+      <fieldset>
+        <legend>1. Sonda</legend>
+        <div id="sondas" class="opciones"></div>
+      </fieldset>
+      <fieldset id="f-modo">
+        <legend>2. Qué ver</legend>
+        <div class="opciones">
+          <label><input type="radio" name="modo" value="animacion" checked>
+            <span>Animación del viaje (trayectoria y medidas a la vez)</span></label>
+          <label><input type="radio" name="modo" value="sobrevuelos">
+            <span>Solo los sobrevuelos (planetas, satélites y asteroides)</span></label>
+        </div>
+      </fieldset>
+      <fieldset id="f-acercar">
+        <legend>3. Vista ampliada</legend>
+        <div class="opciones">
+          <label><input type="checkbox" id="acercar">
+            <span>Ampliar la vista al pasar junto a un planeta, satélite o asteroide (y pararse en los
+              momentos especiales del viaje)</span></label>
+        </div>
+      </fieldset>
+      <fieldset id="f-pasos">
+        <legend id="l-pasos">4. Qué cuerpos ver</legend>
+        <div id="pasos" class="opciones"></div>
+        <div class="nota">
+          <button type="button" class="enlace" id="todos">Marcar todos</button> ·
+          <button type="button" class="enlace" id="ninguno">Desmarcar todos</button>
+        </div>
+      </fieldset>
+      <div class="acciones"><button type="submit" class="boton grande" id="empezar">Empezar</button></div>
+      <p id="aviso-form" class="aviso" hidden></p>
+    </form>
+  </section>
+
+  <!-- Paso 2: el visor -->
+  <section id="visor" hidden>
+    <div class="col-mapa">
+      <div class="lienzo-mapa"><canvas id="mapa"></canvas></div>
+      <p id="pie" class="pie"></p>
+    </div>
+    <div class="col-datos">
+      <div class="arriba">
+        <figure id="foto">
+          <figcaption class="titulo-foto" id="foto-titulo"></figcaption>
+          <img id="foto-img" alt="">
+          <figcaption class="pie-foto" id="foto-pie"></figcaption>
+        </figure>
+        <div id="info"></div>
+      </div>
+      <p id="cabecera" class="cabecera"></p>
+      <div id="series"></div>
+    </div>
+  </section>
+  <div id="cargando" hidden>Cargando…</div>
+</main>
+
+<nav id="controles" hidden>
+  <button id="b-play" class="boton">▶ Reproducir</button>
+  <button id="b-ini" class="boton">⟲ Inicio</button>
+  <button id="b-zoom" class="boton">Ampliar: no</button>
+  <label class="deslizador fecha">Fecha <input type="range" id="s-t" min="0" max="10000" value="0">
+    <span id="t-txt"></span></label>
+  <label class="deslizador">Días por paso <input type="range" id="s-v" min="1" max="120" value="20">
+    <span id="v-txt">20</span></label>
+</nav>
+
+<footer>
+  Datos: JPL Horizons, NASA SPDF (COHOWeb, CDAWeb), archivo PDS (UCLA), Photojournal y archivo NSSDCA de la
+  NASA y Wikimedia Commons (fotos de las Pioneer). Fotos: NASA/JPL (dominio público).
+  Teclas: espacio = reproducir o pausar · ← → = paso · Z = vista ampliada.
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
