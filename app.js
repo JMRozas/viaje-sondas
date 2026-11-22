@@ -10,10 +10,11 @@ const UA_KM = 149597870.7, C_KM_S = 299792.458, DIA_LUZ_UA = 86400 * C_KM_S / UA
 const MAG_SOL_1UA = -26.74, MAG_LUNA_LLENA = -12.74, JD_J2000 = 2451545.0;
 const DURACION_BREVE_S = 6, DURACION_BREVE_FOTOS_S = 12, DURACION_ORBITAL_S = 180;
 const PAUSA_FOTO_ORBITAL_S = 4, PAUSA_FOTO_S = 2.5, DIAS_CERCA = 8, VENTANA_AVISO = 420, PASO_MS = 40;
-// La versión de escritorio pide un paso cada 40 ms, pero dibujar cada paso con matplotlib le lleva unos
-// 95 ms: avanza a unos 10 pasos por segundo. El navegador dibuja a 25 fotogramas por segundo, así que cada
-// fotograma avanza solo esta fracción de un paso para ir al mismo ritmo (y igual de suave).
-const RITMO = PASO_MS / 95;
+// La versión de escritorio pide un paso cada 40 ms, pero dibujar cada paso con matplotlib le lleva más: lo
+// que tarda de verdad lo mide al cerrar su ventana y exportar_web lo pasa a datos/indice.json (ms_por_paso).
+// El navegador dibuja a 25 fotogramas por segundo, así que cada fotograma avanza solo esta fracción de un
+// paso para ir al mismo ritmo (y igual de suave).
+let RITMO = PASO_MS / 95;
 const TEXTO = "#e6e9ef", TENUE = "#8a93a6", PANEL = "#11161f";
 
 // elementos keplerianos aproximados (JPL, Standish), J2000, eclíptica: a, e, I, L, varpi, Omega y por siglo
@@ -1168,6 +1169,7 @@ function aplicarCondiciones() {
 }
 async function iniciar() {
   V.indice = await json("datos/indice.json");
+  if (V.indice.ms_por_paso > PASO_MS) RITMO = PASO_MS / V.indice.ms_por_paso;
   const previo = guardado.leer(), cont = $("#sondas");
   for (const s of V.indice.sondas) {
     const l = document.createElement("label");
