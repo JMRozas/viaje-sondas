@@ -577,7 +577,8 @@ function dibujar() {
   V.enc = w > 0 ? sv : null;
   cambioDeVista(w > 0.5 ? sv : null, ventanaEn(V.t));
 
-  const esc = W / (2 * h), X = (x) => W / 2 + (x - c[0]) * esc, Y = (y) => H / 2 - (y - c[1]) * esc;
+  // (la ventana c ± h cabe entera aunque el lienzo no sea cuadrado)
+  const esc = Math.min(W, H) / (2 * h), X = (x) => W / 2 + (x - c[0]) * esc, Y = (y) => H / 2 - (y - c[1]) * esc;
   const enVista = (x, y, m = 0.04) => Math.abs(x - c[0]) < h * (1 - m) && Math.abs(y - c[1]) < h * (1 - m);
   const g = ctx;
   g.setTransform(1, 0, 0, 1, 0, 0);
@@ -726,9 +727,9 @@ function dibujar() {
   }
 
   // barra de escala
-  const L = redondo(0.25 * 2 * h), frac = L / (2 * h);
+  const L = redondo(0.25 * 2 * h);
   g.strokeStyle = "#fff"; g.lineWidth = 2 * DPR;
-  g.beginPath(); g.moveTo(0.04 * W, 0.105 * H); g.lineTo((0.04 + frac) * W, 0.105 * H); g.stroke();
+  g.beginPath(); g.moveTo(0.04 * W, 0.105 * H); g.lineTo(0.04 * W + L * esc, 0.105 * H); g.stroke();
   let et;
   if (sv && w > 0.5) {
     const km = L * UA_KM;
