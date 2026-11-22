@@ -10,6 +10,10 @@ const UA_KM = 149597870.7, C_KM_S = 299792.458, DIA_LUZ_UA = 86400 * C_KM_S / UA
 const MAG_SOL_1UA = -26.74, MAG_LUNA_LLENA = -12.74, JD_J2000 = 2451545.0;
 const DURACION_BREVE_S = 6, DURACION_BREVE_FOTOS_S = 12, DURACION_ORBITAL_S = 180;
 const PAUSA_FOTO_ORBITAL_S = 4, PAUSA_FOTO_S = 2.5, DIAS_CERCA = 8, VENTANA_AVISO = 420, PASO_MS = 40;
+// La versión de escritorio pide un paso cada 40 ms, pero dibujar cada paso con matplotlib le lleva unos
+// 95 ms: avanza a unos 10 pasos por segundo. El navegador dibuja a 25 fotogramas por segundo, así que cada
+// fotograma avanza solo esta fracción de un paso para ir al mismo ritmo (y igual de suave).
+const RITMO = PASO_MS / 95;
 const TEXTO = "#e6e9ef", TENUE = "#8a93a6", PANEL = "#11161f";
 
 // elementos keplerianos aproximados (JPL, Standish), J2000, eclíptica: a, e, I, L, varpi, Omega y por siglo
@@ -401,19 +405,19 @@ function factorOrbital(sv) {
   }
   return V._fOrbital.get(sv);
 }
-function dt() {
-  let paso = V.velocidad;
+function dt(escala = 1) {
+  let paso = V.velocidad * escala;
   const sv = sobrevueloEn(V.t);
   if (sv) {
     const p = sv.posSonda(V.t), dd = Math.hypot(p[0], p[1]);
     const h = Math.max(4 * sv.R, 1.4 * dd), v = Math.max(sv.velRel(V.t), 1);
     if (sv.orbital) {
-      const x = Math.max(1e-4, factorOrbital(sv) * sv.hEn(V.t) / v / 86400 * V.velocidad / 20);
-      return V.ze < 0.98 ? Math.min(x, 0.05) : x;
+      const x = escala * Math.max(1e-4, factorOrbital(sv) * sv.hEn(V.t) / v / 86400 * V.velocidad / 20);
+      return V.ze < 0.98 ? Math.min(x, 0.05 * escala) : x;
     }
-    if (sv.rapido) return Math.max(1e-4, factorRapido(sv) * h / v / 86400 * V.velocidad / 20);
-    paso = Math.min(paso, Math.max(1 / 1440, 0.01 * h / v / 86400 * V.velocidad / 20));
-    if (V.ze < 0.98) paso = Math.min(paso, 0.05);
+    if (sv.rapido) return escala * Math.max(1e-4, factorRapido(sv) * h / v / 86400 * V.velocidad / 20);
+    paso = Math.min(paso, escala * Math.max(1 / 1440, 0.01 * h / v / 86400 * V.velocidad / 20));
+    if (V.ze < 0.98) paso = Math.min(paso, 0.05 * escala);
   } else if (V.acercar) {
     for (const s of V.svs) {              // no pasar de largo: entrar justo al principio
       if (V.t < s.t_zoom_ini && s.t_zoom_ini <= V.t + paso) { paso = s.t_zoom_ini - V.t + 1e-6; break; }
@@ -439,7 +443,7 @@ function paso() {
     V.pausa = null; V.fotoM = 0;
   }
   if (V.jugando) {
-    let nuevo = V.t + dt();
+    let nuevo = V.t + dt(RITMO);
     const ahoraSv = sobrevueloEn(V.t);
     if (V.acercar && (!ahoraSv || ahoraSv.rapido || ahoraSv.orbital)) {
       for (const s of V.svs) {
@@ -470,7 +474,7 @@ function paso() {
   }
   const zeObj = sobrevueloEn(V.t) ? 1 : 0;
   if (Math.abs(V.ze - zeObj) > 1e-3) {
-    V.ze += clip(zeObj - V.ze, -0.05, 0.05);
+    V.ze += clip(zeObj - V.ze, -0.05 * RITMO, 0.05 * RITMO);
     if (Math.abs(V.ze - zeObj) < 0.02) V.ze = zeObj;
     cambio = true;
   }
