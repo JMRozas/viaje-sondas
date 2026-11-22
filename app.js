@@ -561,8 +561,18 @@ function dibujar() {
     const p = sv.posSonda(V.t);
     let he = Math.max(4 * sv.R, 1.4 * Math.hypot(p[0], p[1])) / UA_KM;
     if (sv.orbital) he = sv.hEn(V.t) / UA_KM;
-    h = Math.exp((1 - w) * Math.log(h) + w * Math.log(he));
-    c = [(1 - w) * c[0] + w * centro[0], (1 - w) * c[1] + w * centro[1]];
+    if (V.t > sv.t_zoom_fin || V.t < sv.t_zoom_ini) {
+      // saliendo de la vista ampliada: los datos del sobrevuelo se acaban y la sonda sigue; el encuadre
+      // se abre lo necesario para que no se salga
+      const ph = pHelio(V.t);
+      he = Math.max(he, 1.25 * Math.hypot(ph[0] - centro[0], ph[1] - centro[1]));
+    }
+    const h0 = h;
+    h = Math.exp((1 - w) * Math.log(h0) + w * Math.log(he));
+    // el centro se desplaza al mismo ritmo que se cierra el encuadre: así el planeta (y la sonda, junto a
+    // él) no se salen de la vista mientras se amplía o se reduce
+    const f = h0 > he * 1.0001 ? (h - he) / (h0 - he) : 1 - w;
+    c = [centro[0] + (c[0] - centro[0]) * f, centro[1] + (c[1] - centro[1]) * f];
   }
   V.enc = w > 0 ? sv : null;
   cambioDeVista(w > 0.5 ? sv : null, ventanaEn(V.t));
@@ -679,6 +689,7 @@ function dibujar() {
   }
 
   // la sonda
+  V._pxSonda = [X(ps[0]) / W, Y(ps[1]) / H];      // (para comprobar que no se sale del encuadre)
   g.beginPath(); g.arc(X(ps[0]), Y(ps[1]), 4 * DPR, 0, 7); g.fillStyle = d.color; g.fill();
   g.lineWidth = 0.9 * DPR; g.strokeStyle = "#fff"; g.stroke();
   g.font = fuente(8.5, "bold"); g.fillStyle = d.color; g.textAlign = "left";
@@ -870,7 +881,7 @@ function info() {
   if (i > d.i_contacto) estado = `Sin contacto desde ${d.fin_contacto}: posición extrapolada.`;
   else if (i > d.i_fin_datos && d.hay_medio) estado = d.fin_mision ? "No hay datos del medio interplanetario de estas fechas." : "Sin datos publicados todavía para estas fechas.";
   let enc = "";
-  if (V.enc) {
+  if (V.enc && V.t >= V.enc.ts[0] && V.t <= V.enc.ts[V.enc.ts.length - 1]) {
     const sv = V.enc, p = sv.posSonda(V.t), dk = Math.hypot(...p);
     enc = `A ${num(dk, 0)} km de ${sv.sistema} (${num(dk / sv.R, 1)} ${sv.simbolo}), a ${num(sv.velRel(V.t), 1)} km/s de ${sv.sistema}`;
   }
